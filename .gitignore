@@ -1,0 +1,7 @@
+.gradle
+.idea
+build
+xlr-chef-plugin.iml
+*.ipr
+*.iws
+src/downloads

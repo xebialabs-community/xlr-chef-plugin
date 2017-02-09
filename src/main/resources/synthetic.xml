@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+
+    THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS
+    FOR A PARTICULAR PURPOSE. THIS CODE AND INFORMATION ARE NOT SUPPORTED BY XEBIALABS.
+
+-->
+<synthetic xsi:schemaLocation="http://www.xebialabs.com/deployit/synthetic/synthetic.xsd"
+           xmlns="http://www.xebialabs.com/deployit/synthetic"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <!--
+  ########################################################################
+  #  Chef Tasks
+  ########################################################################
+  -->
+  <type type="chef.Task" extends="xlrelease.PythonScript" virtual="true">
+      <property name="iconLocation" default="chef/chef-logo.png" hidden="true" />
+      <property name="chefClient"   category="input" label="Client" referenced-type="chef.Client" kind="ci"/>
+      <property name="address"      category="input" kind="string" required="true"/>
+      <property name="nodeName"     category="input" kind="string" required="true"/>
+      <property name="knifeFile"    category="input" kind="string" required="true" size="large" />
+      <property name="chefKey"      category="input" kind="string" required="true" size="large" />
+      <property name="data"         category="output" kind="string"/>
+  </type>
+
+  <type type="chef.Knife" extends="chef.Task">
+      <property name="searchCriteria" category="input" kind="string"/>
+      <property name="attribute"      category="input" kind="string"/>
+      <property name="sudo"           category="input" kind="boolean" default="true"/>
+      <property name="chefCommand"    category="input" kind="string" default="chef-client" hidden="true"/>
+  </type>
+
+   <type type="chef.UnixBootstrap" extends="chef.Task">
+      <property name="scriptLocation" default="chef/unixBootstrap.py"  hidden="true" />
+      <property name="sudo"           category="input" kind="boolean"  required="true" default="true"/>
+      <property name="sudoPassword"   category="input" kind="boolean"  required="true" default="true"/>
+      <property name="sshUser"        category="input" kind="string"   required="false" />
+      <property name="sshPassword"    category="input" kind="string"   required="false" password="true" />
+      <property name="identity"       category="input" kind="string"   required="false" size="large" />
+      <property name="runList"        category="input" kind="string"   required="false" />
+   </type>
+
+   <!--
+     #######################################################################################################################
+     #   Chef Client Configuration
+     #######################################################################################################################
+    -->
+   <type type="chef.Client" extends="xlrelease.Configuration">
+      <property name="chefPath"
+                label="Path to Chef DK tools"
+                required="true" />
+      <property name="os"
+                label="Type of operating system (UNIX = True / WINDOWS = False)"
+                kind="boolean"
+                required="true" />
+   </type>
+</synthetic>

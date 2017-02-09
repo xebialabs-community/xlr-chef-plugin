@@ -1,0 +1,9 @@
+[
+  {
+    "type":"chef.Client",
+    "chefPath":"/usr/local",
+    "os":true,
+    "title":"ChefDK",
+    "id":"Configuration/Custom/Configuration292168780"
+  }
+]

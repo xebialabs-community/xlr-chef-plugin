@@ -1,0 +1,148 @@
+[
+   {
+      "variables" : [],
+      "$lastModifiedBy" : "admin",
+      "$createdAt" : "2017-01-27T21:03:03.648+0000",
+      "allowConcurrentReleasesFromTrigger" : true,
+      "abortOnFailure" : false,
+      "id" : "Applications/Release366333343",
+      "roleViewers" : [],
+      "queryableStartDate" : "2017-01-27T14:00:00Z",
+      "scheduledStartDate" : "2017-01-27T14:00:00Z",
+      "runningTriggeredReleasesCount" : 0,
+      "attachments" : [],
+      "title" : "ChefDemo",
+      "createdFromTrigger" : false,
+      "$lastModifiedAt" : "2017-01-27T21:05:26.243+0000",
+      "extensions" : [],
+      "teams" : [
+         {
+            "permissions" : [
+               "release#edit",
+               "release#start",
+               "release#reassign_task",
+               "template#view",
+               "release#edit_security",
+               "release#abort",
+               "release#view",
+               "release#edit_task"
+            ],
+            "roles" : [],
+            "id" : "Applications/Release366333343/Team615695401",
+            "members" : [],
+            "type" : "xlrelease.Team",
+            "teamName" : "Release Admin"
+         },
+         {
+            "type" : "xlrelease.Team",
+            "teamName" : "Template Owner",
+            "members" : [
+               "admin"
+            ],
+            "id" : "Applications/Release366333343/Team502259055",
+            "permissions" : [
+               "template#edit",
+               "template#view",
+               "template#edit_triggers",
+               "template#edit_security",
+               "template#create_release"
+            ],
+            "roles" : []
+         }
+      ],
+      "tutorial" : false,
+      "flagStatus" : "OK",
+      "releaseTriggers" : [],
+      "$createdBy" : "admin",
+      "realFlagStatus" : "OK",
+      "type" : "xlrelease.Release",
+      "memberViewers" : [],
+      "tags" : [],
+      "maxConcurrentReleases" : 100,
+      "$metadata" : {
+         "globalVariables" : null,
+         "security" : null
+      },
+      "calendarPublished" : false,
+      "phases" : [
+         {
+            "$lastModifiedBy" : "admin",
+            "$createdAt" : "2017-01-27T21:03:03.693+0000",
+            "id" : "Applications/Release366333343/Phase212078252",
+            "color" : "#009CDB",
+            "flagStatus" : "OK",
+            "tasks" : [
+               {
+                  "title" : "bootstrap",
+                  "$lastModifiedAt" : "2017-01-27T21:05:26.197+0000",
+                  "attachments" : [],
+                  "$createdAt" : "2017-01-27T21:03:21.038+0000",
+                  "id" : "Applications/Release366333343/Phase212078252/Task862194691",
+                  "$lastModifiedBy" : "admin",
+                  "status" : "PLANNED",
+                  "tags" : [],
+                  "failuresCount" : 0,
+                  "comments" : [],
+                  "pythonScript" : {
+                     "$createdAt" : "2017-01-27T21:03:21.038+0000",
+                     "id" : "Applications/Release366333343/Phase212078252/Task862194691/PythonScript",
+                     "chefClient" : "Configuration/Custom/Configuration292168780",
+                     "$lastModifiedBy" : "admin",
+                     "customScriptTask" : "Applications/Release366333343/Phase212078252/Task862194691",
+                     "sudo" : true,
+                     "nodeName" : "stella",
+                     "sshUser" : "rbroker",
+                     "$lastModifiedAt" : "2017-01-27T21:05:26.198+0000",
+                     "knifeFile" : "current_dir = File.dirname(__FILE__)\nlog_level                :info\nlog_location             STDOUT\nnode_name                \"rbroker\"\nclient_key               \"#{current_dir}/rbroker.pem\"\nchef_server_url          \"https://ibanez/organizations/xebialabs\"\ncookbook_path            [\"#{current_dir}/../cookbooks\"]",
+                     "chefKey" : "-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEAvLbihFa2onzz2SSCnGdcxC3/EOd5NTipyzdeRzE1abKMJu9s\n+RUhcpx3z8L3oKT0PjSRmyV8HtiW/BGQ/geWTsiVghv4uUY3qFSDgJUrembH4XWz\nCPCXiO9QsPMRmzF82jhxX4VJIESBDhnRDmlzDm2XeZZs1m9eta4Cu0PHcafgzc3M\nqdAd+y4zCAXcJqVXnvyRRvhRnIwU5dcbeVQ2I715Z02PHsRlQHWkVS/E+4ZkmUoD\neszFjb/rUcRrTjF32v0zut/YSXroSmSjlfYcOeiyYqQ0/QOf2LTiOaWTtomRO257\nccGSXwg5o01OO+frVkaR7/4JPx/l4Lk7EpGLBQIDAQABAoIBAG/DLAHOTRmMQOpf\nyg6Q1IrG5uF/BPS1GzHkF6y4AvcXLBO/Bl252vZCnl5oDDmSl6fjgDxPBeRKx5h/\nWsxnd+guuQS2RiaL5FiHvN3A+l/iUQxApYhs3IHXoYU6Xzn3JAclGFfG2xkGGRxd\nw8byQpbP5r62jLyudnvIk4uOR6cSDWGypyJfY+xOpS0YwT2jgqx25ALlXFd1aHDP\nxHhyR5nddUYUFJLq8Z8V4DyHufiaWKqW3NTFhNSMKc+0V3krOH3M7IpIQlv5HMs/\nRFTWsFXOgq3zdBdlWJnCLUPqoPO4044smb+re5PtFPlpdazkMH4ORKfLMectTlIK\nPx1nHmECgYEA7TmNWqhIv7aivKN9uPHhaPsBcWEtvoZ3EOcQSijrY1o178MK4fWq\ne/0jkhclfKNNgcK/zGAPE6N6fYQWYcpRAKFZ/N5Ge4GoJLvz2tkBG31Fj3hLUzxZ\nACDRwnAhpx9q712H5+qXq3+rEnzQtrYeestRyDgXhcqds65qZzd5/d0CgYEAy6Z0\nqjHfPA0VinVndBZBUk8LRj8gxBZNKLti/vtEUNL0UEFZPHCHj8WdrQxJ8PZVOeU+\nsP71HWsgGfCLOUctqGO6j5lqkx8JFn0c+Zk8BJeTreyHjY1yof4+zEw+TPA6um+W\nCv6fvU9lAlRo7fABYB4pR1cW3mhiXlAkrFmH00kCgYEApT5Is5SzkC+VLleoFLMQ\ndAMcXzD1H1klCTYbB713Me690XSIWRu6FMIhC/tplmdebvwMhD2JYwGmKlZfDOFU\nCV9bgqQGbrPDP0tZMuGkPtTFJooB1kocKNWzp4BaQMLGx1PcfnTQD5tPvAILlKpJ\nkvmbzx8ba4vWzDm7Toi7RlUCgYEAhOwoyc2zf2aq4Kyw0byU9jxRh5A8usAzrJpi\niztF49tNS/TbYe+xC85YlFKpEHY4Oom+2ZgQNRtu4H943/HtgzNU2dWxEkX3kI4p\nE2FJI1YsNiFkeKgSYlmoc4BwSZejPX0H2jVH3jCsJVEjC+rTewE0wDO/4XsQea6l\nwTjOxsECgYBcKoOV/vb6ahW2ujtxaw8BEpj0XN3fq00YQ1p+AOy1LEjMf4yFkweh\nwY4cN4EAIbe/MIGYcksQRExaagzCM4uN33H0PC5fDNpy5d/o0NVEb5wYAthif/wX\nDDMD/e1DMZTvLpcnhRuWNioVOKt8jPYx9x8pM3rbJnQUTP/R2cdQYA==\n-----END RSA PRIVATE KEY-----",
+                     "address" : "192.168.2.106",
+                     "sshPassword" : "{b64}Fy7HXyKm5ryX0XWbQUAeKg==",
+                     "$createdBy" : "admin",
+                     "type" : "chef.UnixBootstrap",
+                     "sudoPassword" : false
+                  },
+                  "variableMapping" : {},
+                  "overdueNotified" : false,
+                  "$createdBy" : "admin",
+                  "type" : "xlrelease.CustomScriptTask",
+                  "container" : "Applications/Release366333343/Phase212078252",
+                  "waitForScheduledStartDate" : true,
+                  "hasBeenDelayed" : false,
+                  "flagStatus" : "OK",
+                  "hasBeenFlagged" : false
+               },
+               {
+                  "flagStatus" : "OK",
+                  "conditions" : [],
+                  "hasBeenFlagged" : false,
+                  "dependencies" : [],
+                  "waitForScheduledStartDate" : true,
+                  "hasBeenDelayed" : false,
+                  "container" : "Applications/Release366333343/Phase212078252",
+                  "overdueNotified" : false,
+                  "variableMapping" : {},
+                  "comments" : [],
+                  "type" : "xlrelease.GateTask",
+                  "$createdBy" : "admin",
+                  "status" : "PLANNED",
+                  "tags" : [],
+                  "failuresCount" : 0,
+                  "id" : "Applications/Release366333343/Phase212078252/Task179845097",
+                  "$createdAt" : "2017-01-27T21:03:29.385+0000",
+                  "$lastModifiedBy" : "admin",
+                  "attachments" : [],
+                  "$lastModifiedAt" : "2017-01-27T21:03:29.385+0000",
+                  "title" : "GATE"
+               }
+            ],
+            "$createdBy" : "admin",
+            "type" : "xlrelease.Phase",
+            "release" : "Applications/Release366333343",
+            "title" : "bootstrap",
+            "$lastModifiedAt" : "2017-01-27T21:03:13.916+0000",
+            "status" : "PLANNED"
+         }
+      ],
+      "status" : "TEMPLATE"
+   }
+]
