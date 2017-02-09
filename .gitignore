@@ -5,3 +5,4 @@ xlr-chef-plugin.iml
 *.ipr
 *.iws
 src/downloads
+supervisord.log
