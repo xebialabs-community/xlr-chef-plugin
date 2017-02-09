@@ -35,7 +35,6 @@ class ChefClient( object ):
    # End knife
    #
    def bootstrapUnix( self, address, nodeName, knifeFile, chefKey, sudo, sudoPassword, sshUser, sshPassword, identity, runList ):
-      print "knife bootstrap %s --ssh-user %s --ssh-password '%s' --sudo --use-sudo-password --node-name %s" % ( address, sshUser, sshPassword, nodeName)
       if sudo :
          sudoParm = "--sudo"
       else:
@@ -57,7 +56,6 @@ class ChefClient( object ):
          scriptFile = connection.getTempFile('chef', '.bat')
          scriptPath = re.sub('chef.bat', '', scriptFile.getPath())
          script="""#!/bin/bash
-set -x
 cd %s
 KNIFERB='%s
 '
@@ -66,14 +64,10 @@ CHEFKEY='%s
 mkdir .chef
 echo "$KNIFERB" > .chef/knife.rb
 echo "$CHEFKEY" > .chef/chefkey.pem
-tar -cvzf /tmp/chefkit.tgz ./*
 %s/bin/knife ssl fetch
 %s/bin/knife ssl check
 %s/bin/knife bootstrap %s --ssh-user %s --ssh-password '%s' %s %s --node-name %s %s
 """ % ( scriptPath, knifeFile, chefKey, self.chefPath, self.chefPath, self.chefPath, address, sshUser, sshPassword, sudoParm, sudoPassParm, nodeName, runOpt)
-         print "\nscript ---------------\n%s\nscript-----------\n" % script
-         print "Create file %s" % (scriptFile.getPath())
-         print "\nscript ---------------\n%s\nscript-----------\n" % script
          OverthereUtils.write( String( script ).getBytes(), scriptFile )
          
          scriptFile.setExecutable(True)
@@ -81,9 +75,9 @@ tar -cvzf /tmp/chefkit.tgz ./*
          self.cmdLine.addArgument( scriptFile.getPath() )
          exitCode = connection.execute( self.stdout, self.stderr, self.cmdLine )
          print "===== STD Out ===="
-         print self.getStdout()
+         print self.getStdoutLines()
          print "===== STD Err ===="
-         print self.getStderr()
+         print self.getStderrLines()
       except Exception, e:
          print "Caught Exception "
          stacktrace = StringWriter()

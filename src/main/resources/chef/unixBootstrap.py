@@ -16,8 +16,6 @@ chefDXClient = ChefClient.createDXClient(chefClient)
 
 try:
    data = chefDXClient.bootstrapUnix( address, nodeName, knifeFile, chefKey, sudo, sudoPassword, sshUser, sshPassword, identity, runList )
-   #print "\n"
-   #print chefDXClient.printData( data )
 except Exception, e:
    exc_info = sys.exc_info()
    traceback.printException( *exc_info )
