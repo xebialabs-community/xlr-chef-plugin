@@ -97,7 +97,140 @@ echo "$CHEFKEY" > .chef/chefkey.pem
       print "bootstrap Windows"
       # knife bootstrap windows winrm ADDRESS --winrm-user USER --winrm-password 'PASSWORD' --node-name node1-windows --run-list 'recipe[learn_chef_iis]'
    # End bootstrapWindows
-   
+
+   def deleteNode( self, nodeName, knifeFile, chefKey ):
+      connection = None
+      try:
+         connection = LocalConnection.getLocalConnection()
+         scriptFile = connection.getTempFile('chef', '.bat')
+         scriptPath = re.sub('chef.bat', '', scriptFile.getPath())
+         script="""#!/bin/bash
+cd %s
+KNIFERB='%s
+'
+CHEFKEY='%s
+'
+mkdir .chef
+echo "$KNIFERB" > .chef/knife.rb
+echo "$CHEFKEY" > .chef/chefkey.pem
+%s/bin/knife node delete --yes %s
+""" % ( scriptPath, knifeFile, chefKey, self.chefPath, nodeName)
+         OverthereUtils.write( String( script ).getBytes(), scriptFile )
+         
+         scriptFile.setExecutable(True)
+         print "Execute file %s" % ( scriptFile.getPath() )
+         self.cmdLine.addArgument( scriptFile.getPath() )
+         exitCode = connection.execute( self.stdout, self.stderr, self.cmdLine )
+         print "===== STD Out ===="
+         print self.getStdoutLines()
+         print "===== STD Err ===="
+         print self.getStderrLines()
+      except Exception, e:
+         print "Caught Exception "
+         stacktrace = StringWriter()
+         writer = PrintWriter( stacktrace, True )
+         e.printStackTrace(writer)
+         self.stderr.handleLine(stacktrace.toString())
+         return 1
+      finally:
+         if connection is not None:
+            connection.close()
+         # End if
+      # End try
+      return exitCode
+   # End def
+
+   def deleteClient( self, nodeName, knifeFile, chefKey ):
+      connection = None
+      try:
+         connection = LocalConnection.getLocalConnection()
+         scriptFile = connection.getTempFile('chef', '.bat')
+         scriptPath = re.sub('chef.bat', '', scriptFile.getPath())
+         script="""#!/bin/bash
+cd %s
+KNIFERB='%s
+'
+CHEFKEY='%s
+'
+mkdir .chef
+echo "$KNIFERB" > .chef/knife.rb
+echo "$CHEFKEY" > .chef/chefkey.pem
+%s/bin/knife client delete --yes %s
+""" % ( scriptPath, knifeFile, chefKey, self.chefPath, nodeName)
+         OverthereUtils.write( String( script ).getBytes(), scriptFile )
+      
+         scriptFile.setExecutable(True)
+         print "Execute file %s" % ( scriptFile.getPath() )
+         self.cmdLine.addArgument( scriptFile.getPath() )
+         exitCode = connection.execute( self.stdout, self.stderr, self.cmdLine )
+         print "===== STD Out ===="
+         print self.getStdoutLines()
+         print "===== STD Err ===="
+         print self.getStderrLines()
+      except Exception, e:
+         print "Caught Exception "
+         stacktrace = StringWriter()
+         writer = PrintWriter( stacktrace, True )
+         e.printStackTrace(writer)
+         self.stderr.handleLine(stacktrace.toString())
+         return 1
+      finally:
+         if connection is not None:
+            connection.close()
+         # End if
+      # End try
+      return exitCode
+   # End def
+
+
+   def getCookbookList( self, knifeFile, chefKey, options ):
+      connection = None
+      try:
+         if (type(options).__name__ <> 'NoneType' and len(options) > 0):
+            options = " %s " % options
+         else:
+            options = ""
+         # End if
+         connection = LocalConnection.getLocalConnection()
+         scriptFile = connection.getTempFile('chef', '.bat')
+         scriptPath = re.sub('chef.bat', '', scriptFile.getPath())
+         script="""#!/bin/bash
+cd %s
+KNIFERB='%s
+'
+CHEFKEY='%s
+'
+mkdir .chef
+echo "$KNIFERB" > .chef/knife.rb
+echo "$CHEFKEY" > .chef/chefkey.pem
+%s/bin/knife cookbook list %s
+""" % ( scriptPath, knifeFile, chefKey, self.chefPath, options)
+         OverthereUtils.write( String( script ).getBytes(), scriptFile )
+          
+         scriptFile.setExecutable(True)
+         print "Execute file %s" % ( scriptFile.getPath() )
+         self.cmdLine.addArgument( scriptFile.getPath() )
+         exitCode = connection.execute( self.stdout, self.stderr, self.cmdLine )
+         print "===== STD Out ===="
+         print self.getStdoutLines()
+         print "===== STD Err ===="
+         print self.getStderrLines()
+      except Exception, e:
+         print "Caught Exception "
+         stacktrace = StringWriter()
+         writer = PrintWriter( stacktrace, True )
+         e.printStackTrace(writer)
+         self.stderr.handleLine(stacktrace.toString())
+         return 1
+      finally:
+         if connection is not None:
+            connection.close()
+         # End if
+      # End try
+      return exitCode
+   # End def
+
+
    def printData(self, data):
       print data
    # End def
