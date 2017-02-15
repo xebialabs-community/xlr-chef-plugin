@@ -15,7 +15,8 @@ if chefClient is None:
 chefDXClient = ChefClient.createDXClient(chefClient)
 
 try:
-   data = chefDXClient.deleteClient(knifeFile, chefKey, nodeName )
+   errorCode = chefDXClient.deleteClient(knifeFile, chefKey, nodeName )
+   data = chefDXClient.getData()
 except Exception, e:
    exc_info = sys.exc_info()
    traceback.printException( *exc_info )

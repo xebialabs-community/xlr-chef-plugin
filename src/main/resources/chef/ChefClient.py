@@ -64,6 +64,7 @@ CHEFKEY='%s
 mkdir .chef
 echo "$KNIFERB" > .chef/knife.rb
 echo "$CHEFKEY" > .chef/chefkey.pem
+tar -czf /tmp/chef.tgz .
 %s/bin/knife ssl fetch
 %s/bin/knife ssl check
 %s/bin/knife bootstrap %s --ssh-user %s --ssh-password '%s' %s %s --node-name %s %s
@@ -74,10 +75,8 @@ echo "$CHEFKEY" > .chef/chefkey.pem
          print "Execute file %s" % ( scriptFile.getPath() )
          self.cmdLine.addArgument( scriptFile.getPath() )
          exitCode = connection.execute( self.stdout, self.stderr, self.cmdLine )
-         print "===== STD Out ===="
-         print self.getStdoutLines()
-         print "===== STD Err ===="
-         print self.getStderrLines()
+         self.printStdOut()
+         self.printStdErr()
       except Exception, e:
          print "Caught Exception "
          stacktrace = StringWriter()
@@ -98,7 +97,7 @@ echo "$CHEFKEY" > .chef/chefkey.pem
       # knife bootstrap windows winrm ADDRESS --winrm-user USER --winrm-password 'PASSWORD' --node-name node1-windows --run-list 'recipe[learn_chef_iis]'
    # End bootstrapWindows
 
-   def deleteNode( self, nodeName, knifeFile, chefKey ):
+   def deleteNode( self, knifeFile, chefKey, nodeName ):
       connection = None
       try:
          connection = LocalConnection.getLocalConnection()
@@ -111,20 +110,21 @@ KNIFERB='%s
 CHEFKEY='%s
 '
 mkdir .chef
+tar -czf /tmp/chef.tgz .
 echo "$KNIFERB" > .chef/knife.rb
 echo "$CHEFKEY" > .chef/chefkey.pem
+%s/bin/knife ssl fetch
+%s/bin/knife ssl check
 %s/bin/knife node delete --yes %s
-""" % ( scriptPath, knifeFile, chefKey, self.chefPath, nodeName)
+""" % ( scriptPath, knifeFile, chefKey, self.chefPath, self.chefPath, self.chefPath, nodeName)
          OverthereUtils.write( String( script ).getBytes(), scriptFile )
          
          scriptFile.setExecutable(True)
          print "Execute file %s" % ( scriptFile.getPath() )
          self.cmdLine.addArgument( scriptFile.getPath() )
          exitCode = connection.execute( self.stdout, self.stderr, self.cmdLine )
-         print "===== STD Out ===="
-         print self.getStdoutLines()
-         print "===== STD Err ===="
-         print self.getStderrLines()
+         self.printStdOut()
+         self.printStdErr()
       except Exception, e:
          print "Caught Exception "
          stacktrace = StringWriter()
@@ -140,7 +140,7 @@ echo "$CHEFKEY" > .chef/chefkey.pem
       return exitCode
    # End def
 
-   def deleteClient( self, nodeName, knifeFile, chefKey ):
+   def deleteClient( self, knifeFile, chefKey, nodeName ):
       connection = None
       try:
          connection = LocalConnection.getLocalConnection()
@@ -153,20 +153,21 @@ KNIFERB='%s
 CHEFKEY='%s
 '
 mkdir .chef
+tar -czf /tmp/chef.tgz .
 echo "$KNIFERB" > .chef/knife.rb
 echo "$CHEFKEY" > .chef/chefkey.pem
+%s/bin/knife ssl fetch
+%s/bin/knife ssl check
 %s/bin/knife client delete --yes %s
-""" % ( scriptPath, knifeFile, chefKey, self.chefPath, nodeName)
+""" % ( scriptPath, knifeFile, chefKey, self.chefPath, self.chefPath, self.chefPath, nodeName)
          OverthereUtils.write( String( script ).getBytes(), scriptFile )
       
          scriptFile.setExecutable(True)
          print "Execute file %s" % ( scriptFile.getPath() )
          self.cmdLine.addArgument( scriptFile.getPath() )
          exitCode = connection.execute( self.stdout, self.stderr, self.cmdLine )
-         print "===== STD Out ===="
-         print self.getStdoutLines()
-         print "===== STD Err ===="
-         print self.getStderrLines()
+         self.printStdOut()
+         self.printStdErr()
       except Exception, e:
          print "Caught Exception "
          stacktrace = StringWriter()
@@ -201,20 +202,21 @@ KNIFERB='%s
 CHEFKEY='%s
 '
 mkdir .chef
+tar -czf /tmp/chef.tgz .
 echo "$KNIFERB" > .chef/knife.rb
 echo "$CHEFKEY" > .chef/chefkey.pem
+%s/bin/knife ssl fetch
+%s/bin/knife ssl check
 %s/bin/knife cookbook list %s
-""" % ( scriptPath, knifeFile, chefKey, self.chefPath, options)
+""" % ( scriptPath, knifeFile, chefKey, self.chefPath, self.chefPath, self.chefPath, options)
          OverthereUtils.write( String( script ).getBytes(), scriptFile )
           
          scriptFile.setExecutable(True)
          print "Execute file %s" % ( scriptFile.getPath() )
          self.cmdLine.addArgument( scriptFile.getPath() )
          exitCode = connection.execute( self.stdout, self.stderr, self.cmdLine )
-         print "===== STD Out ===="
-         print self.getStdoutLines()
-         print "===== STD Err ===="
-         print self.getStderrLines()
+         self.printStdOut()
+         self.printStdErr()
       except Exception, e:
          print "Caught Exception "
          stacktrace = StringWriter()
@@ -247,6 +249,15 @@ echo "$CHEFKEY" > .chef/chefkey.pem
       return self.stdout.getOutputLines()
    # End getStdoutLines
    
+   def printStdOut(self):
+      print "#===== STD Out ====\n\n"
+      tmpData = self.getStdoutLines()
+      for val in tmpData:
+         print "%s\n" % val
+      self.data = tmpData[len(tmpData)-1]
+      print "#===== STD Out ====\n\n"
+   # End printStdOut
+   
    def getStderr(self):
       return self.stderr.getOutput()
    # End getStderr
@@ -254,4 +265,16 @@ echo "$CHEFKEY" > .chef/chefkey.pem
    def getStderrLines(self):
       return self.stderr.getOutputLines()
    # End getStderrLines
+
+   def printStdErr(self):
+      print "#===== STD Err ====\n\n"
+      tmpData = self.getStderrLines()
+      for val in tmpData:
+         print "%s\n" % val
+      print "#===== STD Err ====\n\n"
+   # End printStdOut
+   
+   def getData(self):
+      return self.data
+   # End getData
 # End ChefClient

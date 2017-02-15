@@ -18,9 +18,10 @@
   <type type="chef.Task" extends="xlrelease.PythonScript" virtual="true">
       <property name="iconLocation" default="chef/chef-logo.png" hidden="true" />
       <property name="chefClient"   category="input" label="Client" referenced-type="chef.Client" kind="ci"/>
-      <property name="knifeFile"    category="input" kind="string" required="true" size="large" />
-      <property name="chefKey"      category="input" kind="string" required="true" size="large" />
-      <property name="data"         category="output" kind="string"/>
+      <property name="knifeFile"    category="input"  kind="string" required="true" size="large" />
+      <property name="chefKey"      category="input"  kind="string" required="true" size="large" />
+      <property name="data"         category="output" kind="string" />
+      <property name="errorCode"    category="output" kind="string" />
   </type>
 
   <type type="chef.Knife" extends="chef.Task">
