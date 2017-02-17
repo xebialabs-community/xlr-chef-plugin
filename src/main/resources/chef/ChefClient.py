@@ -7,9 +7,9 @@ import re
 import java.lang.String as String
 from java.io import PrintWriter
 from java.io import StringWriter
-from com.xebialabs.overthere import CmdLine, ConnectionOptions, OperatingSystemFamily
+from com.xebialabs.overthere import CmdLine
 from com.xebialabs.overthere.util import CapturingOverthereExecutionOutputHandler, OverthereUtils
-from com.xebialabs.overthere.local import LocalConnection, LocalFile
+from com.xebialabs.overthere.local import LocalConnection
 
 class ChefClient( object ):
    def __init__(self, chefCI ):

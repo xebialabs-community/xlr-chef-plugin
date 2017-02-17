@@ -4,7 +4,6 @@
 # FOR A PARTICULAR PURPOSE. THIS CODE AND INFORMATION ARE NOT SUPPORTED BY XEBIALABS.
 #
 
-import sys, string, time
 from chef.ChefClient import ChefClient
 
 if chefClient is None:
