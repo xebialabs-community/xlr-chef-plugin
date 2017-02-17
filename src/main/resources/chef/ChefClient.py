@@ -120,7 +120,6 @@ echo "$CHEFKEY" > .chef/chefkey.pem
 %s/bin/knife node delete --yes %s
 """ % ( scriptPath, knifeFile, chefKey, self.chefPath, self.chefPath, self.chefPath, nodeName)
          OverthereUtils.write( String( script ).getBytes(), scriptFile )
-         
          scriptFile.setExecutable(True)
          print "Execute file %s" % ( scriptFile.getPath() )
          self.cmdLine.addArgument( scriptFile.getPath() )
@@ -164,7 +163,6 @@ echo "$CHEFKEY" > .chef/chefkey.pem
 %s/bin/knife client delete --yes %s
 """ % ( scriptPath, knifeFile, chefKey, self.chefPath, self.chefPath, self.chefPath, nodeName)
          OverthereUtils.write( String( script ).getBytes(), scriptFile )
-      
          scriptFile.setExecutable(True)
          print "Execute file %s" % ( scriptFile.getPath() )
          self.cmdLine.addArgument( scriptFile.getPath() )
@@ -214,7 +212,6 @@ echo "$CHEFKEY" > .chef/chefkey.pem
 %s/bin/knife cookbook list %s
 """ % ( scriptPath, knifeFile, chefKey, self.chefPath, self.chefPath, self.chefPath, options)
          OverthereUtils.write( String( script ).getBytes(), scriptFile )
-          
          scriptFile.setExecutable(True)
          print "Execute file %s" % ( scriptFile.getPath() )
          self.cmdLine.addArgument( scriptFile.getPath() )
