@@ -71,7 +71,6 @@ tar -czf /tmp/chef.tgz .
 %s/bin/knife bootstrap %s --ssh-user %s --ssh-password '%s' %s %s --node-name %s %s
 """ % ( scriptPath, knifeFile, chefKey, self.chefPath, self.chefPath, self.chefPath, address, sshUser, sshPassword, sudoParm, sudoPassParm, nodeName, runOpt)
          OverthereUtils.write( String( script ).getBytes(), scriptFile )
-         
          scriptFile.setExecutable(True)
          print "Execute file %s" % ( scriptFile.getPath() )
          self.cmdLine.addArgument( scriptFile.getPath() )
