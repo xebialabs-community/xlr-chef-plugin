@@ -5,7 +5,6 @@
 #
 import re
 import java.lang.String as String
-from java.lang import Exception
 from java.io import PrintWriter
 from java.io import StringWriter
 from com.xebialabs.overthere import CmdLine, ConnectionOptions, OperatingSystemFamily
@@ -29,6 +28,7 @@ class ChefClient( object ):
       return ChefClient( chefCI )
    # End createDKClient
    #
+   @classmethod
    def knife( self, search, cmd, attribute ):
       print "kife"
       # knife ssh 'role:web' 'sudo chef-client' --ssh-user rbroker --ssh-password 'merlin1' --attribute publicip
