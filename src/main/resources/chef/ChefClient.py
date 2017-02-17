@@ -34,6 +34,7 @@ class ChefClient( object ):
       # knife ssh 'role:web' 'sudo chef-client' --ssh-user rbroker --ssh-password 'merlin1' --attribute publicip
    # End knife
    #
+   @classmethod
    def bootstrapUnix( self, address, nodeName, knifeFile, chefKey, sudo, sudoPassword, sshUser, sshPassword, identity, runList ):
       if sudo :
          sudoParm = "--sudo"
@@ -92,11 +93,13 @@ tar -czf /tmp/chef.tgz .
       return exitCode
    # End bootstrapUnix
    #
+   @classmethod
    def bootstrapWindows( self, address, nodeName, runList):
       print "bootstrap Windows"
       # knife bootstrap windows winrm ADDRESS --winrm-user USER --winrm-password 'PASSWORD' --node-name node1-windows --run-list 'recipe[learn_chef_iis]'
    # End bootstrapWindows
 
+   @classmethod
    def deleteNode( self, knifeFile, chefKey, nodeName ):
       connection = None
       try:
@@ -140,6 +143,7 @@ echo "$CHEFKEY" > .chef/chefkey.pem
       return exitCode
    # End def
 
+   @classmethod
    def deleteClient( self, knifeFile, chefKey, nodeName ):
       connection = None
       try:
@@ -184,6 +188,7 @@ echo "$CHEFKEY" > .chef/chefkey.pem
    # End def
 
 
+   @classmethod
    def getCookbookList( self, knifeFile, chefKey, options ):
       connection = None
       try:
@@ -233,22 +238,27 @@ echo "$CHEFKEY" > .chef/chefkey.pem
    # End def
 
 
+   @classmethod
    def printData(self, data):
       print data
    # End def
-   
+
+   @classmethod
    def printException(self, e):
       print e
    # End def
-   
+
+   @classmethod
    def getStdout(self):
       return self.stdout.getOutput()
    # End getStdout
-   
+
+   @classmethod
    def getStdoutLines(self):
       return self.stdout.getOutputLines()
    # End getStdoutLines
-   
+
+   @classmethod
    def printStdOut(self):
       print "#===== STD Out ====\n\n"
       tmpData = self.getStdoutLines()
@@ -257,15 +267,18 @@ echo "$CHEFKEY" > .chef/chefkey.pem
       self.data = tmpData[len(tmpData)-1]
       print "#===== STD Out ====\n\n"
    # End printStdOut
-   
+
+   @classmethod
    def getStderr(self):
       return self.stderr.getOutput()
    # End getStderr
-   
+
+   @classmethod
    def getStderrLines(self):
       return self.stderr.getOutputLines()
    # End getStderrLines
 
+   @classmethod
    def printStdErr(self):
       print "#===== STD Err ====\n\n"
       tmpData = self.getStderrLines()
@@ -273,7 +286,8 @@ echo "$CHEFKEY" > .chef/chefkey.pem
          print "%s\n" % val
       print "#===== STD Err ====\n\n"
    # End printStdOut
-   
+
+   @classmethod
    def getData(self):
       return self.data
    # End getData

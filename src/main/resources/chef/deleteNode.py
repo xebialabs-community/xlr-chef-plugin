@@ -5,7 +5,6 @@
 #
 
 import sys, string, time
-from java.lang import Exception
 from chef.ChefClient import ChefClient
 
 if chefClient is None:
