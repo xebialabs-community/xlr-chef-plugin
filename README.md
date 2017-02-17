@@ -1,6 +1,7 @@
 #XL Release Chef Plugin
 
-![TravisCI](https://travis-ci.org/xebialabs-community/xlr-chef-plugin.svg?branch=master)[![Codacy Badge](https://api.codacy.com/project/badge/Grade/09848434df324f96afd8517e05f4b0c1)](https://www.codacy.com/app/zvercodebender/xlr-chef-plugin?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=xebialabs-community/xlr-chef-plugin&amp;utm_campaign=Badge_Grade)
+[![Build Status](https://travis-ci.org/xebialabs-community/xlr-chef-plugin.svg?branch=master)](https://travis-ci.org/xebialabs-community/xlr-chef-plugin)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/09848434df324f96afd8517e05f4b0c1)](https://www.codacy.com/app/zvercodebender/xlr-chef-plugin?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=xebialabs-community/xlr-chef-plugin&amp;utm_campaign=Badge_Grade)
 
 ## Preface
 This document describes the functionality provide by the `xlr-chef-plugin`
