@@ -3,6 +3,7 @@
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS
 # FOR A PARTICULAR PURPOSE. THIS CODE AND INFORMATION ARE NOT SUPPORTED BY XEBIALABS.
 #
+import sys, traceback
 
 from chef.ChefClient import ChefClient
 
@@ -13,12 +14,10 @@ if chefClient is None:
 chefDXClient = ChefClient.createDXClient(chefClient)
 
 try:
-   errorCode = chefDXClient.bootstrapUnix( address, nodeName, knifeFile, chefKey, sudo, sudoPassword, sshUser, sshPassword, identity, runList )
+   errorCode = chefDXClient.bootstrapUnix( address, nodeName, knifeFile, sudo, sudoPassword, sshUser, sshPassword, identity, runList )
    data = chefDXClient.getData()
 except Exception, e:
-   exc_info = sys.exc_info()
-   traceback.printException( *exc_info )
-   print e
+   traceback.print_exc(file=sys.stdout)
    print chefDXClient.print_error( e )
    print "Failed to bootstrap %s" % (nodeName)
    sys.exit(1)

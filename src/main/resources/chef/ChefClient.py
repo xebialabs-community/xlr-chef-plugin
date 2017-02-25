@@ -3,6 +3,7 @@
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS
 # FOR A PARTICULAR PURPOSE. THIS CODE AND INFORMATION ARE NOT SUPPORTED BY XEBIALABS.
 #
+import sys, traceback
 import re
 import java.lang.String as String
 from java.io import PrintWriter
@@ -15,6 +16,7 @@ class ChefClient( object ):
    def __init__(self, chefCI ):
       self.cmdLine = CmdLine()
       self.chefPath = chefCI['chefPath']
+      self.chefKey  = self.formatKey( chefCI['chefKey'] )
       if chefCI['os'] :
          self.os = "UNIX"
       else:
@@ -28,14 +30,12 @@ class ChefClient( object ):
       return ChefClient( chefCI )
    # End createDKClient
    #
-   @classmethod
    def knife( self, search, cmd, attribute ):
       print "kife"
       # knife ssh 'role:web' 'sudo chef-client' --ssh-user rbroker --ssh-password 'merlin1' --attribute publicip
    # End knife
    #
-   @classmethod
-   def bootstrapUnix( self, address, nodeName, knifeFile, chefKey, sudo, sudoPassword, sshUser, sshPassword, identity, runList ):
+   def bootstrapUnix( self, address, nodeName, knifeFile, sudo, sudoPassword, sshUser, sshPassword, identity, runList ):
       if sudo :
          sudoParm = "--sudo"
       else:
@@ -46,18 +46,19 @@ class ChefClient( object ):
       else:
          sudoPassParm = ""
       # End if
+      if (type(runList).__name__ <> 'NoneType' and len(runList) > 0):
+         runOpt = "--run-list '%s'" % runList
+      else:
+         runOpt = ""
+      # End if
       connection = None
       try:
-         if (type(runList).__name__ <> 'NoneType' and len(runList) > 0):
-            runOpt = "--run-list '%s'" % runList
-         else:
-            runOpt = ""
-         # End if
          connection = LocalConnection.getLocalConnection()
          scriptFile = connection.getTempFile('chef', '.bat')
          scriptPath = re.sub('chef.bat', '', scriptFile.getPath())
          script="""#!/bin/bash
 cd %s
+tar -czf /tmp/chef.tgz .
 KNIFERB='%s
 '
 CHEFKEY='%s
@@ -65,11 +66,10 @@ CHEFKEY='%s
 mkdir .chef
 echo "$KNIFERB" > .chef/knife.rb
 echo "$CHEFKEY" > .chef/chefkey.pem
-tar -czf /tmp/chef.tgz .
 %s/bin/knife ssl fetch
 %s/bin/knife ssl check
 %s/bin/knife bootstrap %s --ssh-user %s --ssh-password '%s' %s %s --node-name %s %s
-""" % ( scriptPath, knifeFile, chefKey, self.chefPath, self.chefPath, self.chefPath, address, sshUser, sshPassword, sudoParm, sudoPassParm, nodeName, runOpt)
+""" % ( scriptPath, knifeFile, self.chefKey, self.chefPath, self.chefPath, self.chefPath, address, sshUser, sshPassword, sudoParm, sudoPassParm, nodeName, runOpt)
          OverthereUtils.write( String( script ).getBytes(), scriptFile )
          scriptFile.setExecutable(True)
          print "Execute file %s" % ( scriptFile.getPath() )
@@ -79,10 +79,7 @@ tar -czf /tmp/chef.tgz .
          self.printStdErr()
       except Exception, e:
          print "Caught Exception "
-         stacktrace = StringWriter()
-         writer = PrintWriter( stacktrace, True )
-         e.printStackTrace(writer)
-         self.stderr.handleLine(stacktrace.toString())
+         traceback.print_exc(file=sys.stdout)
          return 1
       finally:
          if connection is not None:
@@ -92,14 +89,12 @@ tar -czf /tmp/chef.tgz .
       return exitCode
    # End bootstrapUnix
    #
-   @classmethod
    def bootstrapWindows( self, address, nodeName, runList):
       print "bootstrap Windows"
       # knife bootstrap windows winrm ADDRESS --winrm-user USER --winrm-password 'PASSWORD' --node-name node1-windows --run-list 'recipe[learn_chef_iis]'
    # End bootstrapWindows
 
-   @classmethod
-   def deleteNode( self, knifeFile, chefKey, nodeName ):
+   def deleteNode( self, knifeFile, nodeName ):
       connection = None
       try:
          connection = LocalConnection.getLocalConnection()
@@ -118,7 +113,7 @@ echo "$CHEFKEY" > .chef/chefkey.pem
 %s/bin/knife ssl fetch
 %s/bin/knife ssl check
 %s/bin/knife node delete --yes %s
-""" % ( scriptPath, knifeFile, chefKey, self.chefPath, self.chefPath, self.chefPath, nodeName)
+""" % ( scriptPath, knifeFile, self.chefKey, self.chefPath, self.chefPath, self.chefPath, nodeName)
          OverthereUtils.write( String( script ).getBytes(), scriptFile )
          scriptFile.setExecutable(True)
          print "Execute file %s" % ( scriptFile.getPath() )
@@ -141,8 +136,7 @@ echo "$CHEFKEY" > .chef/chefkey.pem
       return exitCode
    # End def
 
-   @classmethod
-   def deleteClient( self, knifeFile, chefKey, nodeName ):
+   def deleteClient( self, knifeFile, nodeName ):
       connection = None
       try:
          connection = LocalConnection.getLocalConnection()
@@ -161,7 +155,7 @@ echo "$CHEFKEY" > .chef/chefkey.pem
 %s/bin/knife ssl fetch
 %s/bin/knife ssl check
 %s/bin/knife client delete --yes %s
-""" % ( scriptPath, knifeFile, chefKey, self.chefPath, self.chefPath, self.chefPath, nodeName)
+""" % ( scriptPath, knifeFile, self.chefKey, self.chefPath, self.chefPath, self.chefPath, nodeName)
          OverthereUtils.write( String( script ).getBytes(), scriptFile )
          scriptFile.setExecutable(True)
          print "Execute file %s" % ( scriptFile.getPath() )
@@ -185,8 +179,7 @@ echo "$CHEFKEY" > .chef/chefkey.pem
    # End def
 
 
-   @classmethod
-   def getCookbookList( self, knifeFile, chefKey, options ):
+   def getCookbookList( self, knifeFile, options ):
       connection = None
       try:
          if (type(options).__name__ <> 'NoneType' and len(options) > 0):
@@ -210,7 +203,7 @@ echo "$CHEFKEY" > .chef/chefkey.pem
 %s/bin/knife ssl fetch
 %s/bin/knife ssl check
 %s/bin/knife cookbook list %s
-""" % ( scriptPath, knifeFile, chefKey, self.chefPath, self.chefPath, self.chefPath, options)
+""" % ( scriptPath, knifeFile, self.chefKey, self.chefPath, self.chefPath, self.chefPath, options)
          OverthereUtils.write( String( script ).getBytes(), scriptFile )
          scriptFile.setExecutable(True)
          print "Execute file %s" % ( scriptFile.getPath() )
@@ -233,28 +226,34 @@ echo "$CHEFKEY" > .chef/chefkey.pem
       return exitCode
    # End def
 
+   def formatKey(self, key):
+      chefKey=re.sub("---- .*", "----\n", key)
+      foot=re.sub(".* ----", "----", key)
+      body=re.sub(".*--- ", "", key)
+      body=re.sub(" ---.*", "", body)
+      for l in body.split():
+         chefKey = "%s%s\n" % (chefKey, l)
+      # End for
+      chefKey = "%s%s\n" % (chefKey, foot)
+      return chefKey
+   # End formatKey
 
-   @classmethod
    def printData(self, data):
       print data
    # End def
 
-   @classmethod
    def printException(self, e):
       print e
    # End def
 
-   @classmethod
    def getStdout(self):
       return self.stdout.getOutput()
    # End getStdout
 
-   @classmethod
    def getStdoutLines(self):
       return self.stdout.getOutputLines()
    # End getStdoutLines
 
-   @classmethod
    def printStdOut(self):
       print "#===== STD Out ====\n\n"
       tmpData = self.getStdoutLines()
@@ -264,17 +263,14 @@ echo "$CHEFKEY" > .chef/chefkey.pem
       print "#===== STD Out ====\n\n"
    # End printStdOut
 
-   @classmethod
    def getStderr(self):
       return self.stderr.getOutput()
    # End getStderr
 
-   @classmethod
    def getStderrLines(self):
       return self.stderr.getOutputLines()
    # End getStderrLines
 
-   @classmethod
    def printStdErr(self):
       print "#===== STD Err ====\n\n"
       tmpData = self.getStderrLines()
@@ -283,7 +279,6 @@ echo "$CHEFKEY" > .chef/chefkey.pem
       print "#===== STD Err ====\n\n"
    # End printStdOut
 
-   @classmethod
    def getData(self):
       return self.data
    # End getData

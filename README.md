@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/xebialabs-community/xlr-chef-plugin.svg?branch=master)](https://travis-ci.org/xebialabs-community/xlr-chef-plugin)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/09848434df324f96afd8517e05f4b0c1)](https://www.codacy.com/app/zvercodebender/xlr-chef-plugin?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=xebialabs-community/xlr-chef-plugin&amp;utm_campaign=Badge_Grade)
+[![Code Climate](https://codeclimate.com/github/xebialabs-community/xlr-chef-plugin/badges/gpa.svg)](https://codeclimate.com/github/xebialabs-community/xlr-chef-plugin)
 
 ## Preface
 This document describes the functionality provide by the `xlr-chef-plugin`
@@ -11,6 +12,11 @@ This module offers tasks to apply Chef cookbooks on a remote hosts.
 
 ## Installation
 Copy the plugin JAR file into the `SERVER_HOME/plugins` directory of XL Release.
+
+## Chef CI
+The Chef plugin can connect to multiple Chef servers or connect to the same server with different shared credentials.  The Configuration Item for a Chef server screen looks like the following:
+
+![ChefSharedConfigurationItem](images/ChefSharedConfigurationItem.png)
 
 
 ## Chef Tasks

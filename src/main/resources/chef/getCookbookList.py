@@ -13,7 +13,7 @@ if chefClient is None:
 chefDXClient = ChefClient.createDXClient(chefClient)
 
 try:
-   errorCode = chefDXClient.getCookbookList(knifeFile, chefKey, options)
+   errorCode = chefDXClient.getCookbookList(knifeFile, options)
    data = chefDXClient.getData()
 except Exception, e:
    exc_info = sys.exc_info()
