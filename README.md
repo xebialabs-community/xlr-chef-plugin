@@ -40,3 +40,12 @@ The delete node tasks deletes the node from your chef server
 Get a list of the cookbooks in the Chef Server
 
 ![ChefCookbookList](images/ChefCookbookList.png)
+
+---
+
+## References:
+* [https://docs.chef.io/](https://docs.chef.io/)
+* [https://docs.chef.io/knife_data_bag.html](https://docs.chef.io/knife_data_bag.html)
+* [https://gist.github.com/jtimberman/1302749](https://gist.github.com/jtimberman/1302749)
+* [http://misheska.com/blog/2013/06/16/getting-started-writing-chef-cookbooks-the-berkshelf-way/](http://misheska.com/blog/2013/06/16/getting-started-writing-chef-cookbooks-the-berkshelf-way/)
+
