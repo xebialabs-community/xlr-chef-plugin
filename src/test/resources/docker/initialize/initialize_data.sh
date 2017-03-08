@@ -5,21 +5,23 @@
 # FOR A PARTICULAR PURPOSE. THIS CODE AND INFORMATION ARE NOT SUPPORTED BY XEBIALABS.
 #
 
-BASEDIR=$(dirname $0)
+SCRIPT=$(readlink -f "$0")
+echo "SCRIPT=${SCRIPT}"
+# Absolute path this script is in, thus /home/user/bin
+SCRIPTPATH=$(dirname "$SCRIPT")
+echo "SCRIPTPATH=${SCRIPTPATH}"
 
 ####################### XLR server data
 
-curl -u admin:admin \
-     -H "Accept: application/json" \
-     -H "Content-type: application/json" \
-     -X POST \
-     -d @$BASEDIR/data/server-configs.json \
-     http://localhost:5516/repository/cis
 
-curl -u admin:admin \
-     -H "Accept: application/json" \
-     -H "Content-type: application/json" \
-     -X POST \
-     -d @$BASEDIR/data/release-template.json\
-    http://localhost:5516/api/v1/templates/import
+wget --http-user=admin --http-password=admin --auth-no-challenge \
+     --header="Accept: application/json" \
+     --header="Content-type: application/json" \
+     --post-file=$SCRIPTPATH/data/server-configs.json \
+    http://localhost:5516/repository/cis -O /dev/null
 
+wget --http-user=admin --http-password=admin --auth-no-challenge \
+     --header="Accept: application/json" \
+     --header="Content-type: application/json" \
+     --post-file=$SCRIPTPATH/data/release-template.json \
+     http://localhost:5516/api/v1/templates/import -O /dev/null

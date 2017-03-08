@@ -8,38 +8,63 @@
 This document describes the functionality provide by the `xlr-chef-plugin`
 
 ## Overview
-This module offers tasks to apply Chef cookbooks on a remote hosts.
+This module offers a basic interface to Chef functionality on a Chef server as well as Chef Nodes.
 
 ## Installation
 Copy the plugin JAR file into the `SERVER_HOME/plugins` directory of XL Release.
 
-## Chef CI
-The Chef plugin can connect to multiple Chef servers or connect to the same server with different shared credentials.  The Configuration Item for a Chef server screen looks like the following:
+## Workstation CI
+The Chef plugin can connect to multiple Chef servers or connect to the same server with different shared credentials. In this configuration, the XL Release Server is acting as a Chef Workstation, and needs to have access to the ![Chef DK](https://downloads.chef.io/chefdk). The Configuration Item for the Chef Workstation screen looks like the following:
 
-![ChefSharedConfigurationItem](images/ChefSharedConfigurationItem.png)
-
+![WorkstationSharedConfigurationItem](images/ChefSharedConfiguration.png)
 
 ## Chef Tasks
 
-### Bootstrap Unix Tasks
-The bootstrap unix task bootstraps a unix server into your chef server
+### Bootstrap Unix Task
+The Bootstrap Unix task bootstraps a unix node into your Chef server.
 
 ![ChefBootstrapUnix](images/ChefBootstrapUnix.png)
 
-### Delete Client
-The delete client task deletes the client from your chef server
+### Bootstrap Windows Task
+The Bootstrap Windows task bootstraps a windows node into your Chef server.
 
+![ChefBootstrapWindows](images/ChefBootstrapWindows.png)
+
+### Client List
+The Client List task returns a list of clients from your Chef server.
+![ChefClientList](images/ChefClientList.png)
+
+### Node List
+The Node List task returns a list of nodes from your Chef server.
+![ChefNodeList](images/ChefNodeList.png)
+
+### Show Node
+The Show Node task returns the details of a specified node from your Chef server.
+![ChefShowNode](images/ChefShowNode.png)
+
+### Delete Client
+The Delete Client task deletes the client from your Chef server.
 ![ChefDeleteClient](images/ChefDeleteClient.png)
 
 ### Delete Node
-The delete node tasks deletes the node from your chef server
-
+The Delete Node task deletes the node from your Chef server.
 ![ChefDeleteNode](images/ChefDeleteNode.png)
 
-### Get Cookbook List
-Get a list of the cookbooks in the Chef Server
-
+### Cookbook List
+The Cookbook List task retrieves a list of the cookbooks in the Chef server.
 ![ChefCookbookList](images/ChefCookbookList.png)
+
+### Set Runlist
+The Set Runlist task sets the run_list for a specified node.
+![ChefSetRunlist](images/ChefSetRunlist.png)
+
+### Apply Cookbook Unix
+The Apply Cookbook Unix task applies a cookbook to a specified unix node.
+![ChefApplyCookbookUnix](images/ChefApplyCookbookUnix.png)
+
+### Apply Cookbook Windows
+The Apply Cookbook Windows task applies a cookbook to a specified windows node.
+![ChefApplyCookbookWindows](images/ChefApplyCookbookWindows.png)
 
 ---
 

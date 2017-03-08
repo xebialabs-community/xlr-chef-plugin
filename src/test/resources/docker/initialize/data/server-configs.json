@@ -1,9 +1,12 @@
 [
   {
-    "type":"chef.Client",
-    "chefPath":"/usr/local",
+    "type":"chef.Workstation",
+    "chef_sdk_path":"/opt/chefdk",
     "os":true,
-    "title":"ChefDK",
-    "id":"Configuration/Custom/Configuration292168780"
+    "chef_server_url":"https://some.chef.server/organizations/myorganization",
+    "node_name":"someuser",
+    "client_key":"somekeyvalue",
+    "title":"Chef Configuration",
+    "id":"Configuration/Custom/Configuration891542742"
   }
 ]

@@ -6,3 +6,4 @@ xlr-chef-plugin.iml
 *.iws
 src/downloads
 supervisord.log
+supervisord.pid
