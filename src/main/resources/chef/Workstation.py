@@ -54,72 +54,79 @@ class Workstation(object):
         command.addArgument(zip_script_file.getPath())
         return connection.execute(command)
 
-    def bootstrap_unix(self, address, node_name, sudo, sudo_password, ssh_user, ssh_password, identity_file, run_list, options=None):
-        if sudo :
-            sudo_param = "--sudo"
+    @staticmethod
+    def handle_flag(arguments, flag=None, allow_no_arguments=True):
+        output = ""
+        if flag is not None and flag:
+            if arguments is not None and arguments:
+                output = "%s %s" % (flag, arguments)
+            elif allow_no_arguments:
+                output = "%s" % flag
         else:
-            sudo_param = ""
-        if sudo_password :
-            sudo_password_param = "--use-sudo-password"
-        else:
-            sudo_password_param = ""
-        if run_list is not None and run_list:
-            run_list_param = "--run-list '%s'" % run_list
-        else:
-            run_list_param = ""
+            if arguments is not None and arguments:
+                output = "%s" % arguments
+        return output
+
+    def chef_bootstrapunix(self, variables):
+        sudo_param = ""
+        if variables['sudo']: sudo_param = "--sudo"
+        sudo_password_param = ""
+        if variables['sudo_password']: sudo_password_param = "--use-sudo-password"
+        run_list_param = Workstation.handle_flag(variables['run_list'], "--run-list", False)
         # Handle authentication, identity_file takes precedence.
-        if identity_file is not None and identity_file:
-            authentication_option = "--identity-file %s" % identity_file
+        if variables['identity_file'] is not None and variables['identity_file']:
+            authentication_option = "--identity-file %s" % variables['identity_file']
         else:
-            authentication_option = "--ssh-password '%s'" % ssh_password
+            authentication_option = "--ssh-password '%s'" % variables['ssh_password']
         try:
             return self.execute_knife_command("bootstrap --yes %s --ssh-user %s %s %s %s --node-name %s %s" \
-                % (address, ssh_user, authentication_option, sudo_param, sudo_password_param, node_name, run_list_param), 'bootstrap_unix.script', options, True)
+                % (variables['address'], variables['ssh_user'], authentication_option, sudo_param, sudo_password_param, variables['node_name'], run_list_param), 'chef_bootstrapunix.script', variables['options'], True)
         except Exception:
             traceback.print_exc(file=sys.stdout)
             sys.exit(1)
 
-    def cookbook_list(self, options):
-        return self.execute_knife_command("cookbook list", 'cookbook_list.script', options, True)
+    def chef_cookbooklist(self, variables):
+        return self.execute_knife_command("cookbook list", 'chef_cookbooklist.script', variables['options'], True)
 
-    def node_list(self, options):
-        return self.execute_knife_command("node list", 'node_list.script', options, True)
+    def chef_nodelist(self, variables):
+        return self.execute_knife_command("node list", 'chef_nodelist.script', variables['options'], True)
 
-    def client_list(self, options):
-        return self.execute_knife_command("client list", 'client_list.script', options, True)
+    def chef_clientlist(self, variables):
+        return self.execute_knife_command("client list", 'chef_clientlist.script', variables['options'], True)
 
-    def delete_node(self, node_name, options=None):
-        return self.execute_knife_command("node delete --yes %s" % node_name, 'delete_node.script', options, True)
+    def chef_deletenode(self, variables):
+        return self.execute_knife_command("node delete --yes %s" % variables['node_name'], 'chef_deletenode.script', variables['options'], True)
 
-    def delete_client(self, node_name, options=None):
-        return self.execute_knife_command("client delete --yes %s" % node_name, 'delete_client.script', options, True)
+    def chef_deleteclient(self, variables):
+        return self.execute_knife_command("client delete --yes %s" % variables['node_name'], 'chef_deleteclient.script', variables['options'], True)
 
-    def apply_cookbook(self, node_name, username, password, options, is_unix):
-        if is_unix:
-            return self.execute_knife_command("ssh 'name:%s' 'sudo chef-client' --yes --ssh-user %s --ssh-password '%s'" % (node_name, username, password), 'apply_cookbook_unix.script', options, True)
-        else:
-            return self.execute_knife_command("winrm --yes 'name:%s' 'chef-client' --winrm-user %s --winrm-password '%s'" % (node_name, username, password), 'apply_cookbook_windows.script', options, True)
+    def chef_applycookbookunix(self, variables):
+        return self.execute_knife_command(
+            "ssh 'name:%s' 'sudo chef-client' --yes --ssh-user %s --ssh-password '%s'"
+            % (variables['node_name'], variables['ssh_user'], variables['ssh_password']),
+            'chef_applycookbook_unix.script', variables['options'], True)
 
-    def set_runlist(self, node_name, cookbook_name, options=None):
-        return self.execute_knife_command("node run_list set %s 'recipe[%s]'" % (node_name, cookbook_name), 'set_run_list.script', options, True)
+    def chef_applycookbookwindows(self, variables):
+        return self.execute_knife_command("winrm --yes 'name:%s' 'chef-client' --winrm-user %s --winrm-password '%s'"
+            % (variables['node_name'], variables['username'], variables['password']),
+            'chef_applycookbook_windows.script', variables['options'], True)
 
-    def show_node(self, node_name, options=None):
-        return self.execute_knife_command("node show %s" % node_name, 'show_node.script', options, True)
+    def chef_setrunlist(self, variables):
+        return self.execute_knife_command("node run_list set %s 'recipe[%s]'" % (variables['node_name'], variables['run_list']), 'chef_setrunlist.script', variables['options'], True)
 
-    def bootstrap_windows(self, address, node_name, username, password, run_list, options=None):
-        if run_list is not None and run_list:
-            run_list_param = "--run-list '%s'" % run_list
-        else:
-            run_list_param = ""
-        return self.execute_knife_command("bootstrap --yes windows winrm %s --winrm-user %s --winrm-password '%s' --node-name %s %s" % (address, username, password, node_name, run_list_param), 'bootstrap_windows.script', options, True)
+    def chef_shownode(self, variables):
+        return self.execute_knife_command("node show %s" % variables['node_name'], 'chef_shownode.script', variables['options'], True)
+
+    def chef_bootstrapwindows(self, variables):
+        run_list_param = Workstation.handle_flag(variables['run_list'], "--run-list", False)
+        return self.execute_knife_command("bootstrap --yes windows winrm %s --winrm-user %s --winrm-password '%s' --node-name %s %s"
+            % (variables['address'], variables['username'], variables['password'], variables['node_name'], run_list_param),
+            'chef_bootstrapwindows.script', variables['options'], True)
 
     def execute_knife_command(self, command, script_name, options=None, zip_workspace=False):
         connection = None
         try:
-            if options is not None and options:
-                options = " %s " % options
-            else:
-                options = ""
+            options = Workstation.handle_flag(options, None)
             connection = LocalConnection.getLocalConnection()
             workspace_path = self.create_chef_tmp_workspace(connection)
             knife_command = "#!/bin/bash\ncd %s\n%s/bin/knife %s %s" % (workspace_path, self.chef_sdk_path, command, options)

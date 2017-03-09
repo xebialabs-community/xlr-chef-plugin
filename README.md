@@ -14,7 +14,7 @@ This module offers a basic interface to Chef functionality on a Chef server as w
 Copy the plugin JAR file into the `SERVER_HOME/plugins` directory of XL Release.
 
 ## Workstation CI
-The Chef plugin can connect to multiple Chef servers or connect to the same server with different shared credentials. In this configuration, the XL Release Server is acting as a Chef Workstation, and needs to have access to the ![Chef DK](https://downloads.chef.io/chefdk). The Configuration Item for the Chef Workstation screen looks like the following:
+The Chef plugin can connect to multiple Chef servers or connect to the same server with different shared credentials. In this configuration, the XL Release Server is acting as a Chef Workstation, and needs to have access to the [Chef Development Kit](https://downloads.chef.io/chefdk) (see Assumptions below). The Configuration Item for the Chef Workstation screen looks like the following:
 
 ![WorkstationSharedConfigurationItem](images/ChefSharedConfiguration.png)
 
@@ -68,9 +68,13 @@ The Apply Cookbook Windows task applies a cookbook to a specified windows node.
 
 ---
 
+### Assumptions
+* You have the [Chef Development Kit](https://downloads.chef.io/chefdk) installed on the same machine as the XL Release server and you know the path to it. You must configure that path when creating a Workstation CI. 
+
+---
+
 ## References:
 * [https://docs.chef.io/](https://docs.chef.io/)
 * [https://docs.chef.io/knife_data_bag.html](https://docs.chef.io/knife_data_bag.html)
 * [https://gist.github.com/jtimberman/1302749](https://gist.github.com/jtimberman/1302749)
 * [http://misheska.com/blog/2013/06/16/getting-started-writing-chef-cookbooks-the-berkshelf-way/](http://misheska.com/blog/2013/06/16/getting-started-writing-chef-cookbooks-the-berkshelf-way/)
-

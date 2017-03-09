@@ -24,6 +24,7 @@
     <!-- Chef Task Configurations -->
 
     <type type="chef.Task" extends="xlrelease.PythonScript" virtual="true">
+        <property name="scriptLocation" default="chef/ChefTask.py" hidden="true"/>
         <property name="iconLocation" default="chef/chef-logo.png" hidden="true"/>
         <property name="chef_workstation" category="input" label="Chef Configuration" referenced-type="chef.Workstation" kind="ci" required="true" description="The Chef configuration to use for this task."/>
         <property name="options" category="input" label="Additional Options" kind="string" required="false" description="Additional options to be passed to the Chef task."/>
