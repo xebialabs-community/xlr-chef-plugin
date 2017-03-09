@@ -7,9 +7,9 @@
 import sys
 from chef.Workstation import Workstation
 
-result = Workstation.get_workstation(chef_workstation).apply_cookbook_windows(node_name, username, password, options)
+result = Workstation.get_workstation(chef_workstation).apply_cookbook(node_name, username, password, options, False)
 
-if result[0] <> 0:
+if result[0] != 0:
     sys.exit(result[0])
 else:
     output = result[1].getOutput()

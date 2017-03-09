@@ -9,7 +9,7 @@ from chef.Workstation import Workstation
 
 result = Workstation.get_workstation(chef_workstation).set_runlist(node_name, run_list, options)
 
-if result[0] <> 0:
+if result[0] != 0:
     sys.exit(result[0])
 else:
     output = result[1].getOutput()

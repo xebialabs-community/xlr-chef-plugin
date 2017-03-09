@@ -44,6 +44,16 @@ class Workstation(object):
         chef_key = "%s%s\n" % (chef_key, footer)
         return chef_key
 
+    @staticmethod
+    def zip_workspace(workspace_path, connection):
+        zip_script = "#!/bin/bash\ncd %s\ntar -czf /tmp/chef.tgz ." % workspace_path
+        zip_script_file = connection.getFile(OverthereUtils.constructPath(connection.getFile(workspace_path), 'zip.script'))
+        OverthereUtils.write(String(zip_script).getBytes(), zip_script_file)
+        zip_script_file.setExecutable(True)
+        command = CmdLine()
+        command.addArgument(zip_script_file.getPath())
+        return connection.execute(command)
+
     def bootstrap_unix(self, address, node_name, sudo, sudo_password, ssh_user, ssh_password, identity_file, run_list, options=None):
         if sudo :
             sudo_param = "--sudo"
@@ -53,14 +63,18 @@ class Workstation(object):
             sudo_password_param = "--use-sudo-password"
         else:
             sudo_password_param = ""
-        if (type(run_list).__name__ <> 'NoneType' and len(run_list) > 0):
+        if run_list is not None and run_list:
             run_list_param = "--run-list '%s'" % run_list
         else:
             run_list_param = ""
+        # Handle authentication, identity_file takes precedence.
+        if identity_file is not None and identity_file:
+            authentication_option = "--identity-file %s" % identity_file
+        else:
+            authentication_option = "--ssh-password '%s'" % ssh_password
         try:
-            #TODO: Need to figure out how to do identity file if specified, either ssh password --OR-- identity file
-            return self.execute_knife_command("bootstrap --yes %s --ssh-user %s --ssh-password '%s' %s %s --node-name %s %s" \
-                % (address, ssh_user, ssh_password, sudo_param, sudo_password_param, node_name, run_list_param), 'bootstrap_unix.script', options, True)
+            return self.execute_knife_command("bootstrap --yes %s --ssh-user %s %s %s %s --node-name %s %s" \
+                % (address, ssh_user, authentication_option, sudo_param, sudo_password_param, node_name, run_list_param), 'bootstrap_unix.script', options, True)
         except Exception:
             traceback.print_exc(file=sys.stdout)
             sys.exit(1)
@@ -80,11 +94,11 @@ class Workstation(object):
     def delete_client(self, node_name, options=None):
         return self.execute_knife_command("client delete --yes %s" % node_name, 'delete_client.script', options, True)
 
-    def apply_cookbook_unix(self, node_name, ssh_user, ssh_password, options=None):
-        return self.execute_knife_command("ssh 'name:%s' 'sudo chef-client' --yes --ssh-user %s --ssh-password '%s'" % (node_name, ssh_user, ssh_password), 'apply_cookbook_unix.script', options, True)
-
-    def apply_cookbook_windows(self, node_name, username, password, options=None):
-        return self.execute_knife_command("winrm --yes 'name:%s' 'chef-client' --winrm-user %s --winrm-password '%s'" % (node_name, username, password), 'apply_cookbook_windows.script', options, True)
+    def apply_cookbook(self, node_name, username, password, options, is_unix):
+        if is_unix:
+            return self.execute_knife_command("ssh 'name:%s' 'sudo chef-client' --yes --ssh-user %s --ssh-password '%s'" % (node_name, username, password), 'apply_cookbook_unix.script', options, True)
+        else:
+            return self.execute_knife_command("winrm --yes 'name:%s' 'chef-client' --winrm-user %s --winrm-password '%s'" % (node_name, username, password), 'apply_cookbook_windows.script', options, True)
 
     def set_runlist(self, node_name, cookbook_name, options=None):
         return self.execute_knife_command("node run_list set %s 'recipe[%s]'" % (node_name, cookbook_name), 'set_run_list.script', options, True)
@@ -93,7 +107,7 @@ class Workstation(object):
         return self.execute_knife_command("node show %s" % node_name, 'show_node.script', options, True)
 
     def bootstrap_windows(self, address, node_name, username, password, run_list, options=None):
-        if (type(run_list).__name__ <> 'NoneType' and len(run_list) > 0):
+        if run_list is not None and run_list:
             run_list_param = "--run-list '%s'" % run_list
         else:
             run_list_param = ""
@@ -102,7 +116,7 @@ class Workstation(object):
     def execute_knife_command(self, command, script_name, options=None, zip_workspace=False):
         connection = None
         try:
-            if type(options).__name__ <> 'NoneType' and len(options) > 0:
+            if options is not None and options:
                 options = " %s " % options
             else:
                 options = ""
@@ -150,15 +164,6 @@ class Workstation(object):
             traceback.print_exc(file=sys.stdout)
             sys.exit(1)
 
-    def zip_workspace(self, workspace_path, connection):
-        zip_script = "#!/bin/bash\ncd %s\ntar -czf /tmp/chef.tgz ." % workspace_path
-        zip_script_file = connection.getFile(OverthereUtils.constructPath(connection.getFile(workspace_path), 'zip.script'))
-        OverthereUtils.write(String(zip_script).getBytes(), zip_script_file)
-        zip_script_file.setExecutable(True)
-        command = CmdLine()
-        command.addArgument(zip_script_file.getPath())
-        return connection.execute(command)
-
     def generate_knife_rb(self, path, connection):
         knife_contents ='''current_dir = File.dirname(__FILE__)
   log_level %s
@@ -169,4 +174,3 @@ class Workstation(object):
   Cookbook_path %s''' % (self.log_level, self.log_location, self.node_name, self.chef_server_url, self.cookbook_path)
         knife_rb_file = connection.getFile(OverthereUtils.constructPath(connection.getFile(path), 'knife.rb'))
         OverthereUtils.write(knife_contents, knife_rb_file)
-
