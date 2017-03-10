@@ -66,8 +66,8 @@
     <type type="chef.ShowNode" extends="chef.NodeTask"/>
 
     <type type="chef.ApplyCookbookUnix" extends="chef.NodeTask">
-        <property name="ssh_user" category="input" kind="string" required="true" label="SSH Username" description="The SSH user name."/>
-        <property name="ssh_password" category="input" kind="string" required="true" password="true" label="SSH Password" description="The SSH password. This can be used to pass the password directly on the command line."/>
+        <property name="username" category="input" kind="string" required="true" label="SSH Username" description="The SSH user name."/>
+        <property name="password" category="input" kind="string" required="true" password="true" label="SSH Password" description="The SSH password. This can be used to pass the password directly on the command line."/>
     </type>
 
     <type type="chef.ApplyCookbookWindows" extends="chef.NodeTask">
