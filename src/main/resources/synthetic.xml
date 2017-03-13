@@ -12,7 +12,12 @@
 
     <type type="chef.Workstation" extends="xlrelease.Configuration">
         <property name="chef_sdk_path" label="Chef DK Path" required="true" description="Path to the locally installed Chef Development Kit"/>
-        <property name="os" label="Operating System" kind="boolean" required="true" description="The OS of this machine (UNIX = True / WINDOWS = False)."/>
+        <property name="os" label="Operating System" kind="enum" default="Unix" required="true" description="The OS of the system XL Release resides on.">
+            <enum-values>
+                <value>Unix</value>
+                <value>Windows</value>
+            </enum-values>
+        </property>
         <property name="chef_server_url" label="Server URL" kind="string" required="true" description="URL of the Chef server the workstation will interact with."/>
         <property name="node_name" label="Node Name" kind="string" required="true" description="This may be a username with permission to authenticate to the Chef server or it may be the name of the machine from which knife is run."/>
         <property name="client_key" label="Client Key" kind="string" password="true" required="true" description="Contents of the client key used to authenticate with the Chef server."/>

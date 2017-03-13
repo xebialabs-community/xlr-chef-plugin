@@ -17,7 +17,7 @@ class Workstation(object):
         self.cmd_line = CmdLine()
         self.chef_sdk_path = workstation_config['chef_sdk_path']
         self.client_key  = Workstation.format_key(workstation_config['client_key'])
-        self.unix = workstation_config['os']
+        self.unix = (workstation_config['os'] == 'Unix')
         self.chef_server_url = workstation_config['chef_server_url']
         self.node_name = workstation_config['node_name']
         self.log_level = workstation_config['log_level']
