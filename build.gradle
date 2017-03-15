@@ -25,5 +25,3 @@ license {
     strictCheck false
     excludes(["**/*.json"])
 }
-
-
