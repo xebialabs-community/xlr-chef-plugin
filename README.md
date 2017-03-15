@@ -69,6 +69,10 @@ The Apply Cookbook Unix task applies a cookbook to a specified unix node.
 The Apply Cookbook Windows task applies a cookbook to a specified windows node.
 ![ChefApplyCookbookWindows](images/ChefApplyCookbookWindows.png)
 
+### Upload Cookbook
+The Upload Cookbook task uploads a cookbook to the Chef server.
+![ChefUploadCookbook](images/ChefUploadCookbook.png)
+
 ---
 
 ## References:

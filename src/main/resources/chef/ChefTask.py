@@ -12,9 +12,15 @@ def handle_result(result):
         sys.exit(result[0])
     else:
         output_handler = result[1]
-        result_output = ""
-        for line in output_handler.getOutputLines():
-            result_output = '\n'.join([result_output, line])
+        error_handler = result[2]
+        result_output = parse_output(output_handler.getOutputLines())
+        result_output += parse_output(error_handler.getOutputLines())
+    return result_output
+
+def parse_output(lines):
+    result_output = ""
+    for line in lines:
+        result_output = '\n'.join([result_output, line])
     return result_output
 
 workstation = Workstation.get_workstation(chef_workstation)

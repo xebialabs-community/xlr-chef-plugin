@@ -120,6 +120,10 @@ class Workstation(object):
     def chef_shownode(self, variables):
         return self.execute_knife_command("node show %s" % variables['node_name'], 'chef_shownode.cmd', variables['options'], True)
 
+    def chef_uploadcookbook(self, variables):
+        if variables['override_cookbook_path'] is not None and variables['override_cookbook_path']:
+            self.cookbook_path = variables['override_cookbook_path']
+        return self.execute_knife_command("cookbook upload %s" % variables['cookbook_name'], 'chef_uploadcookbook.cmd', variables['options'], True)
 
     def execute_knife_command(self, command, script_name, options=None, zip_workspace=False):
         connection = None
@@ -138,7 +142,7 @@ class Workstation(object):
             output_handler = CapturingOverthereExecutionOutputHandler.capturingHandler()
             error_handler = CapturingOverthereExecutionOutputHandler.capturingHandler()
             exit_code = connection.execute(output_handler, error_handler, command)
-            return [exit_code, output_handler]
+            return [exit_code, output_handler, error_handler]
         except Exception:
             traceback.print_exc(file=sys.stdout)
             sys.exit(1)
@@ -184,7 +188,7 @@ class Workstation(object):
   node_name "%s"
   client_key "#{current_dir}/chefkey.pem"
   chef_server_url "%s"
-  Cookbook_path %s''' % (self.log_level, self.log_location, self.node_name, self.chef_server_url, self.cookbook_path)
+  cookbook_path ["%s"]''' % (self.log_level, self.log_location, self.node_name, self.chef_server_url, self.cookbook_path)
         knife_rb_file = connection.getFile(OverthereUtils.constructPath(connection.getFile(path), 'knife.rb'))
         OverthereUtils.write(knife_contents, knife_rb_file)
 

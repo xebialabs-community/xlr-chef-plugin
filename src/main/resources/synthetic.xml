@@ -23,7 +23,7 @@
         <property name="client_key" label="Client Key" kind="string" password="true" required="true" description="Contents of the client key used to authenticate with the Chef server."/>
         <property name="log_level" label="Log Level" kind="string" default=":info"/>
         <property name="log_location" label="Log Location" kind="string" default="STDOUT"/>
-        <property name="cookbook_path" label="Cookbook Path" kind="string" default='["#{current_dir}/../cookbooks"]'/>
+        <property name="cookbook_path" label="Cookbook Path" kind="string" default='#{current_dir}/../cookbooks/'/>
     </type>
 
     <!-- Chef Task Configurations -->
@@ -46,8 +46,8 @@
     </type>
 
     <type type="chef.BootstrapUnix" extends="chef.BootstrapTask">
-        <property name="sudo" category="input" kind="boolean" required="true" default="true" label="Use sudo" description="Use to execute a bootstrap operation with sudo."/>
-        <property name="sudo_password" category="input" kind="boolean" required="true" default="true" label="Use sudo Password" description="Use to perform a bootstrap operation with sudo."/>
+        <property name="sudo" category="input" kind="boolean" default="true" label="Use sudo" description="Use to execute a bootstrap operation with sudo."/>
+        <property name="sudo_password" category="input" kind="boolean" default="true" label="Use sudo Password" description="Use to perform a bootstrap operation with sudo."/>
         <property name="ssh_user" category="input" kind="string" required="false" label="SSH Username" description="The SSH user name."/>
         <property name="ssh_password" category="input" kind="string" required="false" password="true" label="SSH Password" description="The SSH password. This can be used to pass the password directly on the command line."/>
         <property name="identity_file" category="input" kind="string" required="false" password="true" label="Identity File" description="The SSH identity file used for authentication."/>
@@ -82,5 +82,10 @@
 
     <type type="chef.SetRunlist" extends="chef.NodeTask">
         <property name="run_list" category="input" kind="string" required="true" label="Run List" description="The run list to be executed."/>
+    </type>
+
+    <type type="chef.UploadCookbook" extends="chef.Task">
+        <property name="cookbook_name" category="input" kind="string" required="true" label="Cookbook Name" description="Name of cookbook being uploaded to the Chef Server."/>
+        <property name="override_cookbook_path" category="input" kind="string" required="false" label="Cookbook Path" description="Override the cookbook path configured on the Chef Workstation."/>
     </type>
 </synthetic>
